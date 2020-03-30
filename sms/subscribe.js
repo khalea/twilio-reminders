@@ -3,8 +3,6 @@ const http = require('http');
 const keys = require('../keys.js');
 let gcpAdminFile = keys.gcpAdminJSON();
 
-// Web portal for sending reminders out to a subscriber list with Twilio SMS & Google Firebase.
-
 // Firebase Config
 var admin = require("firebase-admin");
 var serviceAccount = gcpAdminFile;
@@ -32,7 +30,12 @@ router.post('/sms', (req, res) => {
 
     const twiml = new MessagingResponse();
 
-    if (req.body.Body.trim().toLowerCase() == 'enroll') {
+    // TODO override default keyword responses
+
+    if (req.body.Body.trim().toLowerCase() == 'enroll' || 'start') {
+        
+        // TODO Check if # is already in the DB
+        
         let newSub = db.collection('subscribers').doc();
         let setSub = newSub.set({
             phoneNumber: req.body.From
